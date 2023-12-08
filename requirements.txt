@@ -1,0 +1,9 @@
+numpy
+psycopg2
+scipy
+pandas
+requests
+statsmodels
+spacy
+flask
+flask-cors

@@ -1,0 +1,1131 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_POSTGRESQL",
+      "label": "PostgreSQL",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "postgres",
+      "pluginName": "PostgreSQL"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "barchart",
+      "name": "Bar chart",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "10.1.2"
+    },
+    {
+      "type": "panel",
+      "id": "nodeGraph",
+      "name": "Node Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "postgres",
+      "name": "PostgreSQL",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 11,
+      "panels": [],
+      "title": "Repository Insights",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_POSTGRESQL}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-yellow",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisWidth": 0,
+            "fillOpacity": 90,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "View on GitHub",
+              "url": "${__data.fields.repo_url}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 1
+      },
+      "id": 3,
+      "options": {
+        "barRadius": 0.01,
+        "barWidth": 0.9,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "repo_name",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_POSTGRESQL}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT rsc.repo_name, rsc.cumul_stars as \"Stars\", ru.repo_url \nFROM repo_stars_cumul rsc\nINNER JOIN repo_urls ru ON rsc.repo_name = ru.repo_name\nWHERE rsc.time = TO_DATE('$selected_date', 'DD.MM.YYYY')\nORDER BY \"Stars\" DESC\nLIMIT 10;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Top 10 Repositories by Stars",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_POSTGRESQL}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-yellow",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0.9,
+            "axisWidth": 0,
+            "fillOpacity": 90,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "View on GitHub",
+              "url": "${__data.fields.repo_url}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 1
+      },
+      "id": 4,
+      "options": {
+        "barRadius": 0.01,
+        "barWidth": 0.9,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_POSTGRESQL}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH PreviousStar AS (\n    SELECT \n        rsc.repo_name,\n        rsc.time,\n        rsc.cumul_stars as current_star,\n        LAG(rsc.cumul_stars, 1, 0) OVER (PARTITION BY rsc.repo_name ORDER BY rsc.time) as previous_star\n    FROM repo_stars_cumul rsc\n)\n\n, GrowthRates AS (\n    SELECT \n        ps.repo_name,\n        ps.time,\n        ps.current_star,\n        ps.previous_star,\n        CASE \n            WHEN ps.previous_star = 0 THEN 1\n            ELSE ps.current_star::float / ps.previous_star \n        END as growth_rate\n    FROM PreviousStar ps\n    WHERE ps.time = TO_DATE('$selected_date', 'DD.MM.YYYY')\n)\n\nSELECT \n    gr.repo_name,\n    gr.time,\n    gr.growth_rate as \"Growth rate\",\n    ru.repo_url\nFROM GrowthRates gr\nINNER JOIN repo_urls ru ON gr.repo_name = ru.repo_name\nORDER BY \"Growth rate\" DESC\nLIMIT 10;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Top 10 Fastest Growing Repositories",
+      "type": "barchart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 12,
+      "panels": [],
+      "title": "Keyword Insights",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_POSTGRESQL}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisWidth": 0,
+            "fillOpacity": 90,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "Ignore keyword",
+              "url": "http://0.0.0.0:8080/mark-trivial?keyword=${__data.fields.Keyword}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "blue",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Percentage of READMEs in which keyword appears"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 10
+      },
+      "id": 1,
+      "links": [],
+      "options": {
+        "barRadius": 0.01,
+        "barWidth": 0.9,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Keyword",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.1.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_POSTGRESQL}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH TotalRepos AS (\n    SELECT COUNT(DISTINCT repo_name) as total_repos\n    FROM repo_keywords\n    WHERE time = TO_DATE('$selected_date', 'DD.MM.YYYY')\n),\nKeywordRepos AS (\n    SELECT\n        rk.keyword,\n        ARRAY_AGG(rk.repo_name ORDER BY r.cumul_stars DESC) as ordered_repos\n    FROM repo_keywords rk\n    JOIN repo_stars_cumul r ON rk.repo_name = r.repo_name AND rk.time = r.time\n    WHERE rk.time = TO_DATE('$selected_date', 'DD.MM.YYYY') and rk.keyword NOT IN (SELECT keyword FROM trivial_keywords)\n    GROUP BY rk.keyword\n)\n\nSELECT\n    kr.keyword as \"Keyword\",\n    (COUNT(DISTINCT rk.repo_name) :: FLOAT / tr.total_repos) * 100 as \"% of READMEs in which keyword appears\",\n    kr.ordered_repos as \"Repos in which keyword appears\"\nFROM repo_keywords rk\nJOIN KeywordRepos kr ON rk.keyword = kr.keyword\nCROSS JOIN TotalRepos tr\nWHERE rk.time = TO_DATE('$selected_date', 'DD.MM.YYYY') and rk.keyword NOT IN (SELECT keyword FROM trivial_keywords)\nGROUP BY kr.keyword, tr.total_repos, kr.ordered_repos\nORDER BY \"% of READMEs in which keyword appears\" DESC\nLIMIT 10;\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "repo_keywords"
+        }
+      ],
+      "title": "Top 10 Keywords in READMEs",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_POSTGRESQL}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisWidth": 0,
+            "fillOpacity": 90,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "Ignore keyword",
+              "url": "http://0.0.0.0:8080/mark-trivial?keyword=${__data.fields.keyword}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "Change in % of READMEs in which keyword appears"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 10
+      },
+      "id": 2,
+      "options": {
+        "barRadius": 0.01,
+        "barWidth": 0.9,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_POSTGRESQL}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH \nprevious_date AS (\n    SELECT MAX(time) AS prev_date\n    FROM repo_keywords\n    WHERE time < TO_DATE('$selected_date', 'DD.MM.YYYY')\n),\nkeyword_counts_after AS (\n    SELECT keyword, COUNT(*) as count_after\n    FROM repo_keywords\n    WHERE time = TO_DATE('$selected_date', 'DD.MM.YYYY')\n    GROUP BY keyword\n),\nkeyword_counts_before AS (\n    SELECT keyword, COUNT(*) as count_before\n    FROM repo_keywords\n    WHERE time = (SELECT prev_date FROM previous_date)\n    GROUP BY keyword\n),\nTotalReposAfter AS (\n  SELECT\n    COUNT(DISTINCT repo_name) as total_repos_after\n  FROM\n    repo_keywords\n  WHERE\n    time = TO_DATE('$selected_date', 'DD.MM.YYYY')\n),\nTotalReposBefore AS (\n  SELECT\n    COUNT(DISTINCT repo_name) as total_repos_before\n  FROM\n    repo_keywords\n  WHERE\n    time = (SELECT prev_date FROM previous_date)\n)\nSELECT COALESCE(b.keyword, a.keyword) as keyword, \n       ((COALESCE(a.count_after, 0):: FLOAT / tra.total_repos_after) - (COALESCE(b.count_before, 0):: FLOAT / trb.total_repos_before))*100 as \"Change in % of READMEs in which keyword appears\"\nFROM keyword_counts_before b\nFULL JOIN keyword_counts_after a ON a.keyword = b.keyword\nCROSS JOIN TotalReposBefore trb\nCROSS JOIN TotalReposAfter tra\nWHERE COALESCE(b.keyword, a.keyword) NOT IN (SELECT keyword FROM trivial_keywords)\nORDER BY \"Change in % of READMEs in which keyword appears\" DESC\nLIMIT 10;\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "repo_keywords"
+        }
+      ],
+      "title": "Top 10 Fastest Growing Keywords in READMEs",
+      "type": "barchart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "id": 10,
+      "panels": [],
+      "title": "Shared Keywords Analysis",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_POSTGRESQL}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisWidth": 0,
+            "fillOpacity": 90,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Keyword"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Ignore keyword",
+                    "url": "http://0.0.0.0:8080/mark-trivial?keyword=${__data.fields.Keyword}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Top 3 co-occurring keywords"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": "\\{([^,\"}]+),\\s*\"?([^,\"}]+)\"?,\\s*\"?([^,\"}]+)\"?\\}",
+                      "result": {
+                        "index": 0,
+                        "text": "$1, $2, $3"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 19
+      },
+      "id": 6,
+      "options": {
+        "barRadius": 0.01,
+        "barWidth": 0.9,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        },
+        "xField": "Keyword",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.1.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_POSTGRESQL}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH keyword_with_counts AS (\n    SELECT keyword, COUNT(*) as count, time\n    FROM repo_keywords\n    WHERE repo_name IN ($selected_repos) AND time = TO_DATE('$selected_date', 'DD.MM.YYYY')\n    GROUP BY keyword, time\n    HAVING COUNT(*) > 1\n),\n\nkeyword_cooccurrence_sum AS (\n    SELECT time, keyword1, keyword2, SUM(count) as count\n    FROM keyword_cooccurrence \n    GROUP BY time, keyword1, keyword2\n)\n\nSELECT\n    kwc.keyword as \"Keyword\",\n    kwc.count as \"Occurrences in selected repos\",\n    (ARRAY_AGG(co.keyword2 ORDER BY co.count DESC))[1:3] AS \"Top 3 co-occurring keywords\"\nFROM keyword_with_counts kwc\nLEFT JOIN keyword_cooccurrence_sum co\nON kwc.keyword = co.keyword1 AND kwc.time = co.time\nWHERE kwc.keyword NOT IN (SELECT keyword FROM trivial_keywords)\nGROUP BY kwc.keyword, kwc.count\nORDER BY \"Occurrences in selected repos\" DESC, kwc.keyword\nLIMIT 10;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Shared Keywords in Selected Repos",
+      "transformations": [],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_POSTGRESQL}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Repos where keywords co-occur"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": "\\{([^}]+)\\}",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              },
+              {
+                "id": "custom.inspect",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 19
+      },
+      "id": 13,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.1.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_POSTGRESQL}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH SelectedKeywords AS (\n    SELECT\n        keyword,\n        COUNT(*) AS keyword_count,\n        time,\n        ARRAY_AGG(DISTINCT repo_name) AS repos_with_keyword\n    FROM\n        repo_keywords\n    WHERE\n        repo_name IN ($selected_repos)\n        AND time = TO_DATE('$selected_date', 'DD.MM.YYYY')\n    GROUP BY\n        keyword, time\n    HAVING\n        COUNT(*) > 1\n),\n\nCooccurrenceData AS (\n    SELECT\n        time,\n        keyword1,\n        keyword2,\n        SUM(count) AS cooccurrence_count,\n        ARRAY_AGG(repo_name ORDER BY count DESC) AS cooccurring_repos\n    FROM\n        keyword_cooccurrence\n    GROUP BY\n        time, keyword1, keyword2\n),\n\nTopCooccurringKeywords AS (\n    SELECT\n        sk.keyword AS primary_keyword,\n        (ARRAY_AGG(cd.keyword2 ORDER BY cd.cooccurrence_count DESC))[1:3] AS top_cooccurring_keywords\n    FROM\n        SelectedKeywords sk\n    LEFT JOIN\n        CooccurrenceData cd ON sk.keyword = cd.keyword1 AND sk.time = cd.time\n    WHERE\n        sk.keyword NOT IN (SELECT keyword FROM trivial_keywords)\n    GROUP BY\n        sk.keyword\n    LIMIT 10\n),\n\nExpandedKeywords AS (\n    SELECT\n        primary_keyword,\n        UNNEST(top_cooccurring_keywords) AS secondary_keyword\n    FROM\n        TopCooccurringKeywords\n)\n\nSELECT\n    ek.primary_keyword as \"Keyword 1\",\n    ek.secondary_keyword as \"Keyword 2\",\n    cd.cooccurring_repos as \"Repos where keywords co-occur\"\nFROM\n    ExpandedKeywords ek\nJOIN\n    CooccurrenceData cd ON ek.primary_keyword = cd.keyword1 AND ek.secondary_keyword = cd.keyword2\nWHERE\n    cd.time = TO_DATE('$selected_date', 'DD.MM.YYYY');",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Panel Title",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_POSTGRESQL}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "Unignore keyword",
+              "url": "http://0.0.0.0:8080/unmark-trivial?keyword=${__data.fields.Keyword}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 24,
+        "w": 12,
+        "x": 0,
+        "y": 27
+      },
+      "id": 7,
+      "interval": "1s",
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": false
+      },
+      "pluginVersion": "10.1.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_POSTGRESQL}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT keyword as \"Keyword\" FROM trivial_keywords\nORDER BY \"Keyword\";\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Ignored Keywords",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "${DS_POSTGRESQL}"
+      },
+      "gridPos": {
+        "h": 24,
+        "w": 12,
+        "x": 12,
+        "y": 27
+      },
+      "id": 8,
+      "options": {
+        "nodes": {
+          "arcs": [],
+          "mainStatUnit": "none"
+        }
+      },
+      "pluginVersion": "10.1.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_POSTGRESQL}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "-- Nodes: Representing the keywords\nWITH keyword_with_counts AS (\n  SELECT\n    keyword,\n    COUNT(*) as count,\n    time\n  FROM\n    repo_keywords\n  WHERE\n    repo_name IN ($selected_repos)\n    AND time = TO_DATE('$selected_date', 'DD.MM.YYYY')\n  GROUP BY\n    keyword,\n    time\n  HAVING\n    COUNT(*) > 1\n),\nranked_edges AS (\n  SELECT\n    co.keyword1 AS source,\n    co.keyword2 AS target,\n    ROW_NUMBER() OVER (\n      PARTITION BY co.keyword1\n      ORDER BY\n        co.count DESC\n    ) AS rn\n  FROM\n    keyword_cooccurrence co\n    JOIN keyword_with_counts kwc ON kwc.keyword = co.keyword1\n    AND kwc.time = co.time\n  WHERE\n    co.keyword1 NOT IN (\n      SELECT\n        keyword\n      FROM\n        trivial_keywords\n    )\n    AND co.keyword2 NOT IN (\n      SELECT\n        keyword\n      FROM\n        trivial_keywords\n    )\n),\nrelevant_targets AS (\n  SELECT\n    DISTINCT target AS id\n  FROM\n    ranked_edges\n  WHERE\n    rn <= 5\n) -- Source keywords with counts\nSELECT\n  keyword AS id,\n  keyword AS mainstat,\n  count AS secondarystat,\n  '#0000FF' as color\nFROM\n  keyword_with_counts\nWHERE\n  keyword NOT IN (\n    SELECT\n      keyword\n    FROM\n      trivial_keywords\n  )\nUNION\n-- Targets\nSELECT\n  id,\n  id AS mainstat,\n  NULL AS secondarystat,\n  '#008000' as color\nFROM\n  relevant_targets\nWHERE\n  id NOT IN (\n    SELECT\n      keyword\n    FROM\n      keyword_with_counts\n  );",
+          "refId": "nodes",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "${DS_POSTGRESQL}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "-- Edges: Representing the co-occurrences\nWITH keyword_with_counts AS (\n  SELECT\n    keyword,\n    COUNT(*) as count,\n    time\n  FROM\n    repo_keywords\n  WHERE\n    repo_name IN ($selected_repos)\n    AND time = TO_DATE('$selected_date', 'DD.MM.YYYY')\n  GROUP BY\n    keyword,\n    time\n  HAVING\n    COUNT(*) > 1\n),\nranked_edges AS (\n  SELECT\n    CONCAT(co.keyword1, co.keyword2) as id,\n    co.keyword1 AS source,\n    co.keyword2 AS target,\n    co.count AS mainstat,\n    ROW_NUMBER() OVER (PARTITION BY co.keyword1 ORDER BY co.count DESC) AS rn\n  FROM\n    keyword_cooccurrence co\n  JOIN keyword_with_counts kwc ON kwc.keyword = co.keyword1 AND kwc.time = co.time\n  WHERE\n    co.keyword1 NOT IN (\n      SELECT\n        keyword\n      FROM\n        trivial_keywords\n    )\n    AND co.keyword2 NOT IN (\n      SELECT\n        keyword\n      FROM\n        trivial_keywords\n    )\n)\nSELECT\n  id,\n  source,\n  target,\n  mainstat\nFROM\n  ranked_edges\nWHERE\n  rn <= 5;",
+          "refId": "edges",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Shared and Co-occurring Keywords in Selected Repos",
+      "type": "nodeGraph"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": {
+          "type": "postgres",
+          "uid": "${DS_POSTGRESQL}"
+        },
+        "definition": "SELECT TO_CHAR(time, 'DD.MM.YYYY') \nFROM (\n    SELECT DISTINCT time FROM repo_stars_cumul\n) AS subquery\nORDER BY time DESC;",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Date",
+        "multi": false,
+        "name": "selected_date",
+        "options": [],
+        "query": "SELECT TO_CHAR(time, 'DD.MM.YYYY') \nFROM (\n    SELECT DISTINCT time FROM repo_stars_cumul\n) AS subquery\nORDER BY time DESC;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "postgres",
+          "uid": "${DS_POSTGRESQL}"
+        },
+        "definition": "WITH PreviousStar AS (\n    SELECT \n        repo_name,\n        time,\n        cumul_stars as current_star,\n        LAG(cumul_stars, 1, 0) OVER (PARTITION BY repo_name ORDER BY time) as previous_star\n    FROM repo_stars_cumul\n)\n\n, GrowthRates AS (\n    SELECT \n        repo_name,\n        time,\n        current_star,\n        previous_star,\n        CASE \n            WHEN previous_star = 0 THEN 1\n            ELSE current_star::float / previous_star \n        END as growth_rate\n    FROM PreviousStar\n    WHERE time = TO_DATE('$selected_date', 'DD.MM.YYYY')\n)\n\nSELECT \n    repo_name\nFROM GrowthRates\nORDER BY growth_rate DESC;\n",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Repos",
+        "multi": true,
+        "name": "selected_repos",
+        "options": [],
+        "query": "WITH PreviousStar AS (\n    SELECT \n        repo_name,\n        time,\n        cumul_stars as current_star,\n        LAG(cumul_stars, 1, 0) OVER (PARTITION BY repo_name ORDER BY time) as previous_star\n    FROM repo_stars_cumul\n)\n\n, GrowthRates AS (\n    SELECT \n        repo_name,\n        time,\n        current_star,\n        previous_star,\n        CASE \n            WHEN previous_star = 0 THEN 1\n            ELSE current_star::float / previous_star \n        END as growth_rate\n    FROM PreviousStar\n    WHERE time = TO_DATE('$selected_date', 'DD.MM.YYYY')\n)\n\nSELECT \n    repo_name\nFROM GrowthRates\nORDER BY growth_rate DESC;\n",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "GitHub Insights",
+  "uid": "d0f26f44-b259-4648-b999-565ff2023e4d",
+  "version": 242,
+  "weekStart": ""
+}
